@@ -1,0 +1,5 @@
+package picture
+
+func GenerateASCII() {
+	
+}

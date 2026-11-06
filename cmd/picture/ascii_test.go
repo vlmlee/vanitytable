@@ -2,6 +2,6 @@ package picture
 
 import "testing"
 
-func TestASCII(t *testing.T) {
+func TestGenerateASCII(t *testing.T) {
 
 }

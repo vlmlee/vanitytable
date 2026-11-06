@@ -1,13 +1,15 @@
 package picture
 
-func AddDisplayPicture() {
+import "testing"
+
+func TestAddDisplayPicture(t *testing.T) {
 
 }
 
-func UpdateDisplayPicture() {
+func TestUpdateDisplayPicture(t *testing.T) {
 
 }
 
-func RemoveDisplayPicture() {
-	
+func TestRemoveDisplayPicture(t *testing.T) {
+
 }

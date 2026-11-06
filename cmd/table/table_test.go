@@ -41,3 +41,7 @@ func TestGetDistro(t *testing.T) {
 func TestGetGUITheme(t *testing.T) {
 
 }
+
+func TestGetBattery(t *testing.T) {
+	
+}

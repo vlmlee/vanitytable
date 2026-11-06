@@ -35,5 +35,9 @@ func GetDistro() {
 }
 
 func GetGUITheme() {
+
+}
+
+func GetBattery() {
 	
 }

@@ -1,6 +1,9 @@
 package table
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestTable(t *testing.T) {
 	
@@ -27,7 +30,9 @@ func TestGetRAM(t *testing.T) {
 }
 
 func TestGetUptime(t *testing.T) {
-
+	if !strings.ContainsAny(GetUptime(), "123456789") {
+		t.Error("Could not get the uptime")
+	}
 }
 
 func TestGetShell(t *testing.T) {
@@ -55,5 +60,5 @@ func TestGetTerminalFont(t *testing.T) {
 }
 
 func TestGetDisk(t *testing.T) {
-	
+
 }

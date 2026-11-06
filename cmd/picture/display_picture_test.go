@@ -13,3 +13,7 @@ func TestUpdateDisplayPicture(t *testing.T) {
 func TestRemoveDisplayPicture(t *testing.T) {
 
 }
+
+func TestSetDisplayWindowSize(t *testing.T) {
+	
+}

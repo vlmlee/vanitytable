@@ -11,3 +11,7 @@ func UpdateDisplayPicture() {
 func RemoveDisplayPicture() {
 	
 }
+
+func SetDisplayPictureSize() {
+	
+}

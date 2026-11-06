@@ -48,5 +48,9 @@ func GetBattery() {
 }
 
 func GetTerminalFont() {
+
+}
+
+func GetDisk() {
 	
 }

@@ -51,5 +51,9 @@ func TestGetBattery(t *testing.T) {
 }
 
 func TestGetTerminalFont(t *testing.T) {
+
+}
+
+func TestGetDisk(t *testing.T) {
 	
 }

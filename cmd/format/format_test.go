@@ -11,5 +11,9 @@ func TestFormatDisplayPicture(t *testing.T) {
 }
 
 func TestDisplayPictureShouldResizeToFitWindow(t *testing.T) {
+
+}
+
+func TestFormatString(t *testing.T) {
 	
 }

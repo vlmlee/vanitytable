@@ -19,7 +19,7 @@ func TestGetCPU(t *testing.T) {
 }
 
 func TestGetGPU(t *testing.T) {
-	
+
 }
 
 func TestGetRAM(t *testing.T) {
@@ -48,4 +48,8 @@ func TestGetGUITheme(t *testing.T) {
 
 func TestGetBattery(t *testing.T) {
 
+}
+
+func TestGetTerminalFont(t *testing.T) {
+	
 }

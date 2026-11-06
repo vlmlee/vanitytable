@@ -16,7 +16,7 @@ func GetCPU() {
 }
 
 func GetGPU() {
-	
+
 }
 
 func GetRAM() {
@@ -44,5 +44,9 @@ func GetGUITheme() {
 }
 
 func GetBattery() {
+	
+}
+
+func GetTerminalFont() {
 	
 }

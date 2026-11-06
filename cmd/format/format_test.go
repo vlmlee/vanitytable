@@ -9,3 +9,7 @@ func TestFormatTable(t *testing.T) {
 func TestFormatDisplayPicture(t *testing.T) {
 
 }
+
+func TestDisplayPictureShouldResizeToFitWindow(t *testing.T) {
+	
+}

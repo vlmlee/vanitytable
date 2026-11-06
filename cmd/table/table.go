@@ -15,6 +15,10 @@ func GetCPU() {
 
 }
 
+func GetGPU() {
+	
+}
+
 func GetRAM() {
 
 }

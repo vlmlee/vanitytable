@@ -10,7 +10,9 @@ func TestTable(t *testing.T) {
 }
 
 func TestGetUser(t *testing.T) {
-
+	if _, err := GetUser(); err  != nil {
+		t.Error("User doesn't exist")
+	}
 }
 
 func TestGetOS(t *testing.T) {

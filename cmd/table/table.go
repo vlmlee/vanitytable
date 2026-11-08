@@ -4,12 +4,21 @@ package table
 import (
 	"fmt"
 	"time"
+
+	"github.com/shirou/gopsutil/v3/host"
 )
 
 // Handle OSX, Windows, and Linux
 
-func GetUser() {
+func GetUser() (hostname string, err error) {
+	info, err := host.Info()
 
+	if err != nil {
+		return
+	}
+
+	hostname = info.Hostname
+	return
 }
 
 func GetOS() {

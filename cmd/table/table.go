@@ -2,10 +2,8 @@
 package table
 
 import (
-	"fmt"
-	"time"
-
 	"github.com/shirou/gopsutil/v3/host"
+	"github.com/vlmlee/vanitytable/cmd/format"
 )
 
 // Handle OSX, Windows, and Linux
@@ -37,9 +35,16 @@ func GetRAM() {
 
 }
 
-func GetUptime() string {
-	bootTime := time.Since(time.Now().Add(-1 * time.Hour)) 
-	return fmt.Sprintf("%d mins", int(bootTime.Minutes()))
+func GetUptime() (uptime string, err error) {
+	info, err := host.Info()
+
+	if err != nil {
+		return
+	}
+
+	uptime = format.FormatUptime(info.Uptime)
+
+	return
 }
 
 func GetShell() {

@@ -32,7 +32,8 @@ func TestGetRAM(t *testing.T) {
 }
 
 func TestGetUptime(t *testing.T) {
-	if !strings.ContainsAny(GetUptime(), "123456789") {
+	uptime, err := GetUptime()
+	if !strings.ContainsAny(uptime, "123456789") || err != nil {
 		t.Error("Could not get the uptime")
 	}
 }

@@ -1,4 +1,4 @@
-module github.com/vlmlee/vanitytable.git
+module github.com/vlmlee/vanitytable
 
 go 1.27.0
 

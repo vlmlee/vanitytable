@@ -16,7 +16,10 @@ func TestGetUser(t *testing.T) {
 }
 
 func TestGetOS(t *testing.T) {
-
+	os, err := GetOS()
+	if err != nil || os == "" {
+		t.Error("Could not get the OS")
+	}
 }
 
 func TestGetCPU(t *testing.T) {
@@ -43,7 +46,10 @@ func TestGetShell(t *testing.T) {
 }
 
 func TestGetKernel(t *testing.T) {
-
+	kernel, err := GetKernel()
+	if err != nil || kernel == " " {
+		t.Error("Could not get the kernel")
+	}
 }
 
 func TestGetDistro(t *testing.T) {

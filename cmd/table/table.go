@@ -19,8 +19,15 @@ func GetUser() (hostname string, err error) {
 	return
 }
 
-func GetOS() {
+func GetOS() (os string, err error) {
+	info, err := host.Info()
 
+	if err != nil {
+		return
+	}
+
+	os = info.OS
+	return
 }
 
 func GetCPU() {
@@ -43,7 +50,6 @@ func GetUptime() (uptime string, err error) {
 	}
 
 	uptime = format.FormatUptime(info.Uptime)
-
 	return
 }
 
@@ -51,8 +57,15 @@ func GetShell() {
 
 }
 
-func GetKernel() {
+func GetKernel() (kernel string, err error)  {
+	info, err := host.Info()
 
+	if err != nil {
+		return
+	}
+
+	kernel = info.KernelArch + " " + info.KernelVersion
+	return
 }
 
 func GetDistro() {

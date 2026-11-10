@@ -2,9 +2,11 @@ package format
 
 import (
 	"fmt"
+	"image"
 	"os"
 	"strings"
 
+	"github.com/dolmen-go/kittyimg"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -15,8 +17,22 @@ func FormatTable(data [][]string) {
 	table.Render()
 }
 
-func FormatDisplayPicture() {
+func FormatDisplayPicture(file string) {
+	f, err := os.Open(file)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
 
+	img, _, err := image.Decode(f)
+	if err != nil {
+		panic(err)
+	}
+
+	// Render the image directly to the terminal
+	if err := kittyimg.Fprintln(os.Stdout, img); err != nil {
+		panic(err)
+	}
 }
 
 func FormatString() {

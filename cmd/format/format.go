@@ -2,11 +2,17 @@ package format
 
 import (
 	"fmt"
+	"os"
 	"strings"
+
+	"github.com/olekukonko/tablewriter"
 )
 
-func FormatTable() {
-
+func FormatTable(data [][]string) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.Header(data[0])
+	table.Bulk(data[1:])
+	table.Render()
 }
 
 func FormatDisplayPicture() {
@@ -14,7 +20,7 @@ func FormatDisplayPicture() {
 }
 
 func FormatString() {
-	
+
 }
 
 func FormatUptime(uptime uint64) string {
@@ -35,7 +41,7 @@ func FormatUptime(uptime uint64) string {
 		parts = append(parts, fmt.Sprintf("%dm", minutes))
 	}
 
-	parts = append(parts, fmt.Sprintf("%ds", seconds)) 
+	parts = append(parts, fmt.Sprintf("%ds", seconds))
 
 	return strings.Join(parts, " ")
 }

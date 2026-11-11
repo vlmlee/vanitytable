@@ -118,7 +118,7 @@ func GetKernel() (kernel string, err error) {
 		return
 	}
 
-	kernel = info.KernelArch + " " + info.KernelVersion
+	kernel = fmt.Sprintf("%s (%s)", info.KernelVersion, info.KernelArch)
 	return
 }
 

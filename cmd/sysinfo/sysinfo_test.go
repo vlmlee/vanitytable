@@ -1,4 +1,4 @@
-package table
+package sysinfo
 
 import (
 	"strings"
@@ -7,6 +7,12 @@ import (
 
 func TestTable(t *testing.T) {
 
+}
+
+func TestGetHostname(t *testing.T) {
+	if _, err := GetHostname(); err != nil {
+		t.Error("Hostname doesn't exist")
+	}
 }
 
 func TestGetUser(t *testing.T) {
@@ -23,7 +29,11 @@ func TestGetOS(t *testing.T) {
 }
 
 func TestGetCPU(t *testing.T) {
+	cpu, err := GetCPU()
 
+	if err != nil || cpu == "" {
+		t.Error("Could not get CPU")
+	}
 }
 
 func TestGetGPU(t *testing.T) {

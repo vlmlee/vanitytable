@@ -1,7 +1,10 @@
 // Gets all necessary info to put in the display table. Rows configurable through the CLI.
-package table
+package sysinfo
 
 import (
+	"os/user"
+
+	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/host"
 	"github.com/shirou/gopsutil/v3/mem"
 	"github.com/vlmlee/vanitytable/cmd/format"
@@ -9,7 +12,7 @@ import (
 
 // Handle OSX, Windows, and Linux
 
-func GetUser() (hostname string, err error) {
+func GetHostname() (hostname string, err error) {
 	info, err := host.Info()
 
 	if err != nil {
@@ -17,6 +20,18 @@ func GetUser() (hostname string, err error) {
 	}
 
 	hostname = info.Hostname
+	return
+}
+
+func GetUser() (username string, err error) {
+	currentUser, err := user.Current()
+
+	username = currentUser.Username
+
+	if err != nil {
+		return
+	}
+
 	return
 }
 
@@ -31,8 +46,16 @@ func GetOS() (os string, err error) {
 	return
 }
 
-func GetCPU() {
+func GetCPU() (cpuInfo string, err error) {
+	info, err := cpu.Info()
 
+	if err != nil {
+		return
+	}
+
+	cpuInfo = info[0].ModelName
+
+	return
 }
 
 func GetGPU() {
@@ -46,7 +69,9 @@ func GetRAM() (uint64, error) {
 		return 0, err
 	}
 
-	return memory.Total, nil
+	bytesInGB := 1073741824
+
+	return memory.Total / uint64(bytesInGB), nil
 }
 
 func GetMemoryUsage() (uint64, error) {

@@ -5,3 +5,7 @@ package cli
 func PrintAbout() {
 
 }
+
+func SetDisplayPictureFilePath() {
+
+}

@@ -1,5 +1,113 @@
 package main
 
+import (
+	"fmt"
+	"image"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
+	"log"
+	"math"
+	"os"
+	"strconv"
+	"strings"
+
+	"charm.land/lipgloss/v2"
+	"charm.land/lipgloss/v2/table"
+	"github.com/dolmen-go/kittyimg"
+	"github.com/vlmlee/vanitytable/cmd/format"
+	"github.com/vlmlee/vanitytable/cmd/sysinfo"
+)
+
 func main() {
-	
+	hostname, _ := sysinfo.GetHostname()
+	user, _ := sysinfo.GetUser()
+	osName, _ := sysinfo.GetOS()
+	kernel, _ := sysinfo.GetKernel()
+	cpuName, _ := sysinfo.GetCPU()
+	ram, _ := sysinfo.GetRAM()
+	memUsage, _ := sysinfo.GetMemoryUsage()
+
+	f, err := os.Open("/Users/michaellee/Desktop/vanitytable/cmd/akari.jpeg")
+	if err != nil {
+		log.Fatalf("failed to open image: %v", err)
+	}
+	defer f.Close()
+
+	origImg, _, err := image.Decode(f)
+	if err != nil {
+		log.Fatalf("failed to decode image: %v", err)
+	}
+
+	headerStyle := lipgloss.NewStyle().
+		Bold(true).
+		Foreground(lipgloss.Color(format.Glossy_Pink)).
+		Background(lipgloss.Color(format.Fantasy_Blue)).
+		Padding(0, 1).Align(lipgloss.Center)
+
+	cellStyle := lipgloss.NewStyle().Padding(0, 1)
+
+	t := table.New().
+		Border(lipgloss.RoundedBorder()).
+		BorderRow(true).
+		BorderStyle(lipgloss.NewStyle().Foreground(lipgloss.Color("238"))).
+		StyleFunc(func(row, col int) lipgloss.Style {
+			if row == table.HeaderRow {
+				return headerStyle
+			}
+			return cellStyle
+		}).
+		Headers("SYSTEM", "INFO").
+		Rows(
+			[]string{"Host", hostname},
+			[]string{"User", user},
+			[]string{"OS", osName},
+			[]string{"Kernel", kernel},
+			[]string{"CPU", cpuName},
+			[]string{"RAM", strconv.FormatUint(ram, 10) + "GB / " + strconv.FormatUint(memUsage, 10) + "% used"},
+		)
+
+	renderedTable := t.Render()
+	tableLines := strings.Split(renderedTable, "\n")
+	tableWidth := lipgloss.Width(renderedTable)
+
+	info := format.GetTerminalInfo()
+	leftPad := 2
+	gap := 2
+	maxImgCols := max(10, info.Cols-tableWidth-leftPad-gap)
+	maxImgRows := max(5, info.Rows-2)
+
+	img := format.FormatDisplayPicture(origImg, info, maxImgCols, maxImgRows)
+
+	imgCols := int(math.Ceil(float64(img.Bounds().Dx()) / info.CellW))
+	imgRows := int(math.Ceil(float64(img.Bounds().Dy()) / info.CellH))
+
+	totalHeight := max(imgRows, len(tableLines))
+	tableOffsetCol := leftPad + imgCols + gap
+
+	fmt.Print("\n")
+
+	fmt.Print(strings.Repeat("\n", totalHeight))
+	fmt.Printf("\033[%dA\r", totalHeight)
+
+	if leftPad > 0 {
+		fmt.Printf("\033[%dC", leftPad)
+	}
+
+	if err := kittyimg.Fprint(os.Stdout, img); err != nil {
+		log.Fatalf("failed to render image: %v", err)
+	}
+
+	if imgRows > 1 {
+		fmt.Printf("\033[%dA", imgRows-1)
+	}
+	fmt.Print("\r")
+
+	for _, line := range tableLines {
+		fmt.Printf("\033[%dC%s\n", tableOffsetCol, line)
+	}
+
+	if remaining := totalHeight - len(tableLines); remaining > 0 {
+		fmt.Print(strings.Repeat("\n", remaining+1))
+	}
 }

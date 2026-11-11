@@ -6,11 +6,11 @@ import (
 )
 
 func TestTable(t *testing.T) {
-	
+
 }
 
 func TestGetUser(t *testing.T) {
-	if _, err := GetUser(); err  != nil {
+	if _, err := GetUser(); err != nil {
 		t.Error("User doesn't exist")
 	}
 }
@@ -31,7 +31,19 @@ func TestGetGPU(t *testing.T) {
 }
 
 func TestGetRAM(t *testing.T) {
+	totalRAM, err := GetRAM()
 
+	if totalRAM == 0 || err != nil {
+		t.Error("could not get RAM")
+	}
+}
+
+func TestGetMemoryUsage(t *testing.T) {
+	usage, err := GetMemoryUsage()
+
+	if usage == 0 || err != nil {
+		t.Error("could not get the memory usage")
+	}
 }
 
 func TestGetUptime(t *testing.T) {

@@ -3,6 +3,7 @@ package table
 
 import (
 	"github.com/shirou/gopsutil/v3/host"
+	"github.com/shirou/gopsutil/v3/mem"
 	"github.com/vlmlee/vanitytable/cmd/format"
 )
 
@@ -38,8 +39,24 @@ func GetGPU() {
 
 }
 
-func GetRAM() {
+func GetRAM() (uint64, error) {
+	memory, err := mem.VirtualMemory()
 
+	if err != nil {
+		return 0, err
+	}
+
+	return memory.Total, nil
+}
+
+func GetMemoryUsage() (uint64, error) {
+	memory, err := mem.VirtualMemory()
+
+	if err != nil {
+		return 0, err
+	}
+
+	return uint64(memory.UsedPercent), nil
 }
 
 func GetUptime() (uptime string, err error) {
@@ -57,7 +74,7 @@ func GetShell() {
 
 }
 
-func GetKernel() (kernel string, err error)  {
+func GetKernel() (kernel string, err error) {
 	info, err := host.Info()
 
 	if err != nil {
@@ -77,7 +94,7 @@ func GetGUITheme() {
 }
 
 func GetBattery() {
-	
+
 }
 
 func GetTerminalFont() {

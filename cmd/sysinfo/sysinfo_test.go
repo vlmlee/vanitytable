@@ -75,7 +75,11 @@ func TestGetKernel(t *testing.T) {
 }
 
 func TestGetDistro(t *testing.T) {
+	distro, err := GetDistro()
 
+	if err != nil || distro == "" {
+		t.Error("Could not get distro")
+	}
 }
 
 func TestGetGUITheme(t *testing.T) {

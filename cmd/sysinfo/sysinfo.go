@@ -2,7 +2,9 @@
 package sysinfo
 
 import (
+	"fmt"
 	"os/user"
+	"strings"
 
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/host"
@@ -42,7 +44,17 @@ func GetOS() (os string, err error) {
 		return
 	}
 
-	os = info.OS
+	switch info.OS {
+	case "linux":
+		distro, _ := GetDistro()
+		os = fmt.Sprintf("%s (%s)", "Linux", distro)
+	case "windows":
+		os = "Windows"
+	case "darwin":
+		os = "macOS (darwin)"
+	}
+
+	os = os + " " + info.PlatformVersion
 	return
 }
 
@@ -110,8 +122,21 @@ func GetKernel() (kernel string, err error) {
 	return
 }
 
-func GetDistro() {
+func GetDistro() (distro string, err error) {
+	info, err := host.Info()
 
+	if err != nil {
+		return
+	}
+
+	distro = info.Platform
+	if len(distro) > 0 {
+		distro = strings.ToUpper(distro[:1]) + distro[1:]
+	}
+
+	distro = fmt.Sprintf("%s %s", distro, info.PlatformVersion)
+
+	return
 }
 
 func GetGUITheme() {

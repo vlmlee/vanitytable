@@ -71,14 +71,6 @@ func FormatDisplayPicture(img image.Image, info TableInfo, maxCols, maxRows int)
 	return dst
 }
 
-func FormatTable() {
-
-}
-
-func FormatString() {
-
-}
-
 func FormatUptime(uptime uint64) string {
 	days := uptime / 86400
 	hours := (uptime % 86400) / 3600

@@ -2,15 +2,24 @@
 package sysinfo
 
 import (
+	"bytes"
 	"fmt"
+	"os"
+	"os/exec"
 	"os/user"
+	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/shirou/gopsutil/v3/cpu"
+	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/host"
 	"github.com/shirou/gopsutil/v3/mem"
+	"github.com/shirou/gopsutil/v3/process"
 	"github.com/vlmlee/vanitytable/cmd/format"
 )
+
+const bytesInGB = 1073741824
 
 // Handle OSX, Windows, and Linux
 
@@ -70,8 +79,44 @@ func GetCPU() (cpuInfo string, err error) {
 	return
 }
 
-func GetGPU() {
+func GetGPU() string {
+	switch runtime.GOOS {
+	case "darwin":
+		out, err := exec.Command("system_profiler", "SPDisplaysDataType").Output()
+		if err == nil {
+			for _, line := range strings.Split(string(out), "\n") {
+				if strings.Contains(line, "Chipset Model:") {
+					parts := strings.SplitN(line, ":", 2)
+					return strings.TrimSpace(parts[1])
+				}
+			}
+		}
 
+	case "linux":
+		out, err := exec.Command("sh", "-c", "lspci | grep -iE 'vga|3d|display'").Output()
+		if err == nil {
+			lines := strings.Split(strings.TrimSpace(string(out)), "\n")
+			if len(lines) > 0 && lines[0] != "" {
+				parts := strings.SplitN(lines[0], ": ", 2)
+				if len(parts) == 2 {
+					return strings.TrimSpace(parts[1])
+				}
+			}
+		}
+
+	case "windows":
+		cmd := exec.Command("powershell", "-NoProfile", "-Command", "(Get-CimInstance Win32_VideoController).Name")
+		var out bytes.Buffer
+		cmd.Stdout = &out
+		if err := cmd.Run(); err == nil {
+			lines := strings.Split(strings.TrimSpace(out.String()), "\n")
+			if len(lines) > 0 && lines[0] != "" {
+				return strings.TrimSpace(lines[0])
+			}
+		}
+	}
+
+	return "unknown"
 }
 
 func GetRAM() (uint64, error) {
@@ -80,8 +125,6 @@ func GetRAM() (uint64, error) {
 	if err != nil {
 		return 0, err
 	}
-
-	bytesInGB := 1073741824
 
 	return memory.Total / uint64(bytesInGB), nil
 }
@@ -107,8 +150,21 @@ func GetUptime() (uptime string, err error) {
 	return
 }
 
-func GetShell() {
+func GetShell() string {
+	if runtime.GOOS == "windows" {
+		if os.Getenv("PSModulePath") != "" {
+			return "PowerShell"
+		}
+		if comspec := os.Getenv("COMSPEC"); comspec != "" {
+			return filepath.Base(comspec)
+		}
+		return "unknown"
+	}
 
+	if shell := os.Getenv("SHELL"); shell != "" {
+		return filepath.Base(shell)
+	}
+	return "unknown"
 }
 
 func GetKernel() (kernel string, err error) {
@@ -143,14 +199,70 @@ func GetGUITheme() {
 
 }
 
-func GetBattery() {
+func GetTerminal() string {
+	if termProgram := os.Getenv("TERM_PROGRAM"); termProgram != "" {
+		if termProgram == "Apple_Terminal" {
+			return "Terminal"
+		}
+		if termProgram == "iTerm.app" {
+			return "iTerm2"
+		}
+		return termProgram
+	}
 
+	if os.Getenv("WT_SESSION") != "" {
+		return "Windows Terminal"
+	}
+
+	knownShells := map[string]bool{
+		"zsh": true, "bash": true, "fish": true, "sh": true,
+		"pwsh": true, "powershell.exe": true, "cmd.exe": true, "go": true,
+	}
+
+	pid := int32(os.Getppid())
+	for pid > 1 {
+		proc, err := process.NewProcess(pid)
+		if err != nil {
+			break
+		}
+
+		name, err := proc.Name()
+		if err != nil {
+			break
+		}
+
+		lowerName := strings.ToLower(name)
+		if !knownShells[lowerName] {
+			return name
+		}
+
+		ppid, err := proc.Ppid()
+		if err != nil || ppid == pid {
+			break
+		}
+		pid = ppid
+	}
+
+	if term := os.Getenv("TERM"); term != "" {
+		return term
+	}
+
+	return "unknown"
 }
 
-func GetTerminalFont() {
+func GetDisk() (diskspace string, err error) {
+	// Use C:\ on Windows, / on macOS and Linux
+	path := "/"
+	if runtime.GOOS == "windows" {
+		path = "C:\\"
+	}
 
-}
+	usage, err := disk.Usage(path)
+	if err != nil {
+		return
+	}
 
-func GetDisk() {
+	diskspace = fmt.Sprintf("%.2f GB ~ %.1f%% used", float64(usage.Total)/bytesInGB, usage.UsedPercent)
 
+	return
 }

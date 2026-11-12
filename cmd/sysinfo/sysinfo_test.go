@@ -37,7 +37,11 @@ func TestGetCPU(t *testing.T) {
 }
 
 func TestGetGPU(t *testing.T) {
+	gpu := GetGPU()
 
+	if gpu == "unknown" {
+		t.Error("Could not get GPU")
+	}
 }
 
 func TestGetRAM(t *testing.T) {
@@ -64,7 +68,11 @@ func TestGetUptime(t *testing.T) {
 }
 
 func TestGetShell(t *testing.T) {
+	shell := GetShell()
 
+	if shell == "unknown" {
+		t.Error("Could not get shell")
+	}
 }
 
 func TestGetKernel(t *testing.T) {
@@ -86,14 +94,18 @@ func TestGetGUITheme(t *testing.T) {
 
 }
 
-func TestGetBattery(t *testing.T) {
-
-}
-
 func TestGetTerminalFont(t *testing.T) {
+	terminal := GetTerminal()
 
+	if terminal == "unknown" {
+		t.Error("Could not get terminal")
+	}
 }
 
 func TestGetDisk(t *testing.T) {
+	_, err := GetDisk()
 
+	if err != nil {
+		t.Error("Could not get disk space")
+	}
 }

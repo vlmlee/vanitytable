@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"image"
 	_ "image/gif"
@@ -15,11 +16,32 @@ import (
 	"charm.land/lipgloss/v2"
 	"charm.land/lipgloss/v2/table"
 	"github.com/dolmen-go/kittyimg"
+	"github.com/vlmlee/vanitytable/cmd/cli"
 	"github.com/vlmlee/vanitytable/cmd/format"
 	"github.com/vlmlee/vanitytable/cmd/sysinfo"
 )
 
+var imagePathFlag string
+var printAboutFlag bool
+
+func init() {
+	flag.StringVar(&imagePathFlag, "imagePath", "", "Set the display image path")
+	flag.BoolVar(&printAboutFlag, "about", false, "Info about vanitytable")
+}
+
 func main() {
+	flag.Parse()
+
+	if printAboutFlag {
+		cli.PrintAbout()
+		return
+	}
+
+	if imagePathFlag != "" {
+		cli.SetDisplayPictureFilePath()
+		return
+	}
+
 	hostname, _ := sysinfo.GetHostname()
 	user, _ := sysinfo.GetUser()
 	osName, _ := sysinfo.GetOS()

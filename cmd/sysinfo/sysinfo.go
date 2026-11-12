@@ -262,7 +262,7 @@ func GetDisk() (diskspace string, err error) {
 		return
 	}
 
-	diskspace = fmt.Sprintf("%.2f GB ~ %.1f%% used", float64(usage.Total)/bytesInGB, usage.UsedPercent)
+	diskspace = fmt.Sprintf("%.2fGB ~ %.1f%% used", float64(usage.Total)/bytesInGB, usage.UsedPercent)
 
 	return
 }

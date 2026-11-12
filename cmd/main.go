@@ -57,7 +57,7 @@ func main() {
 
 	config, err := cli.LoadConfig()
 	if err != nil {
-		log.Panic("No configuration file found")
+		log.Fatalf("No configuration file found")
 	}
 
 	f, err := os.Open(config.DisplayImagePath)

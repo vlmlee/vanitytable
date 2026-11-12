@@ -55,7 +55,12 @@ func main() {
 	shell := sysinfo.GetShell()
 	uptime, _ := sysinfo.GetUptime()
 
-	f, err := os.Open("/Users/michaellee/Desktop/vanitytable/cmd/akari.jpeg")
+	config, err := cli.LoadConfig()
+	if err != nil {
+		log.Panic("No configuration file found")
+	}
+
+	f, err := os.Open(config.DisplayImagePath)
 	if err != nil {
 		log.Fatalf("failed to open image: %v", err)
 	}

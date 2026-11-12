@@ -36,6 +36,8 @@ func SetDisplayPictureFilePath() error {
 	}
 
 	config.DisplayImagePath = f.Value.String()
+	SaveConfig(config)
+
 	return nil
 }
 
@@ -49,7 +51,7 @@ func configFilePath() (string, error) {
 	return filepath.Join(baseDir, "vanity_table_config.json"), nil
 }
 
-func SaveConfig(config Config) error {
+func SaveConfig(config *Config) error {
 	path, err := configFilePath()
 
 	if err != nil {
@@ -77,6 +79,7 @@ func LoadConfig() (*Config, error) {
 	}
 
 	data, err := os.ReadFile(path)
+
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			return DefaultConfig, nil

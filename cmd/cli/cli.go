@@ -46,7 +46,7 @@ func configFilePath() (string, error) {
 		return "", err
 	}
 
-	return filepath.Join(baseDir, "config.json"), nil
+	return filepath.Join(baseDir, "vanity_table_config.json"), nil
 }
 
 func SaveConfig(config Config) error {

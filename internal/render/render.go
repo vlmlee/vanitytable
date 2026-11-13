@@ -3,6 +3,9 @@ package render
 import (
 	"fmt"
 	"image"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 	"math"
 	"os"
 	"strconv"
@@ -11,9 +14,9 @@ import (
 	"charm.land/lipgloss/v2"
 	"charm.land/lipgloss/v2/table"
 	"github.com/dolmen-go/kittyimg"
-	"github.com/vlmlee/vanitytable/cmd/format"
-	"github.com/vlmlee/vanitytable/cmd/sysinfo"
 	"github.com/vlmlee/vanitytable/internal/cli"
+	"github.com/vlmlee/vanitytable/internal/format"
+	"github.com/vlmlee/vanitytable/internal/sysinfo"
 )
 
 func RenderTable() error {

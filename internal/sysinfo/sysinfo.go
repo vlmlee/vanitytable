@@ -16,7 +16,7 @@ import (
 	"github.com/shirou/gopsutil/v3/host"
 	"github.com/shirou/gopsutil/v3/mem"
 	"github.com/shirou/gopsutil/v3/process"
-	"github.com/vlmlee/vanitytable/cmd/format"
+	"github.com/vlmlee/vanitytable/internal/format"
 )
 
 const bytesInGB = 1073741824

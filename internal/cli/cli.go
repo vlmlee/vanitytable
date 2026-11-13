@@ -24,14 +24,18 @@ type Options struct {
 	ImagePath string
 }
 
+var ProjectDescription = `
+This project is a neofetch clone built by vlmlee. 
+`
+
 func ParseFlags(args []string, stderr io.Writer) (*Options, error) {
 	fs := flag.NewFlagSet("cli", flag.ContinueOnError)
 	fs.SetOutput(stderr)
 
 	opts := &Options{}
 
-	flag.StringVar(&opts.ImagePath, "imagePath", "", "Set the display image path")
-	flag.BoolVar(&opts.About, "about", false, "Info about vanitytable")
+	fs.StringVar(&opts.ImagePath, "imagePath", "", "Set the display image path")
+	fs.BoolVar(&opts.About, "about", false, "Info about vanitytable")
 
 	if err := fs.Parse(args); err != nil {
 		return opts, err
@@ -42,7 +46,7 @@ func ParseFlags(args []string, stderr io.Writer) (*Options, error) {
 
 // Prints info about this project to stdout
 func PrintAbout() {
-	fmt.Println("vanitytable is a clone of neofetch")
+	fmt.Println(ProjectDescription)
 }
 
 func SetDisplayPictureFilePath() error {

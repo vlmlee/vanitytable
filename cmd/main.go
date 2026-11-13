@@ -28,6 +28,7 @@ func run(args []string) error {
 
 	if opts.About {
 		cli.PrintAbout()
+		os.Exit(0)
 	}
 
 	if opts.ImagePath != "" {

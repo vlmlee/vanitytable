@@ -2,14 +2,21 @@ package picture
 
 import (
 	_ "embed"
+	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 )
 
 func getArt(name string) (string, error) {
-	wd, err := os.Getwd()
-	filePath := filepath.Join(wd, name)
-	content, err := os.ReadFile(filePath)
+	_, currentFile, _, ok := runtime.Caller(0)
+	if !ok {
+		log.Fatal("unable to determine source file path")
+	}
+
+	path := filepath.Join(filepath.Dir(currentFile), name)
+
+	content, err := os.ReadFile(path)
 	if err != nil {
 		return "", err
 	}

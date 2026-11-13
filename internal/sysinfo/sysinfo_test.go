@@ -5,10 +5,6 @@ import (
 	"testing"
 )
 
-func TestTable(t *testing.T) {
-
-}
-
 func TestGetHostname(t *testing.T) {
 	if _, err := GetHostname(); err != nil {
 		t.Error("Hostname doesn't exist")
@@ -88,10 +84,6 @@ func TestGetDistro(t *testing.T) {
 	if err != nil || distro == "" {
 		t.Error("Could not get distro")
 	}
-}
-
-func TestGetGUITheme(t *testing.T) {
-
 }
 
 func TestGetTerminalFont(t *testing.T) {

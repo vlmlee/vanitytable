@@ -195,10 +195,6 @@ func GetDistro() (distro string, err error) {
 	return
 }
 
-func GetGUITheme() {
-
-}
-
 func GetTerminal() string {
 	if termProgram := os.Getenv("TERM_PROGRAM"); termProgram != "" {
 		if termProgram == "Apple_Terminal" {

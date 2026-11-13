@@ -6,6 +6,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 )
@@ -16,6 +17,27 @@ type Config struct {
 
 var DefaultConfig = &Config{
 	DisplayImagePath: "",
+}
+
+type Options struct {
+	About     bool
+	ImagePath string
+}
+
+func ParseFlags(args []string, stderr io.Writer) (*Options, error) {
+	fs := flag.NewFlagSet("cli", flag.ContinueOnError)
+	fs.SetOutput(stderr)
+
+	opts := &Options{}
+
+	flag.StringVar(&opts.ImagePath, "imagePath", "", "Set the display image path")
+	flag.BoolVar(&opts.About, "about", false, "Info about vanitytable")
+
+	if err := fs.Parse(args); err != nil {
+		return opts, err
+	}
+
+	return opts, nil
 }
 
 // Prints info about this project to stdout
@@ -32,7 +54,7 @@ func SetDisplayPictureFilePath() error {
 	f := flag.Lookup("imagePath")
 
 	if f == nil {
-		return errors.New("No imagePath supplied")
+		return fmt.Errorf("No imagePath supplied")
 	}
 
 	config.DisplayImagePath = f.Value.String()

@@ -1,22 +1,19 @@
 package picture
 
 import (
+	"embed"
 	_ "embed"
-	"log"
-	"os"
-	"path/filepath"
-	"runtime"
 )
 
-func getArt(name string) (string, error) {
-	_, currentFile, _, ok := runtime.Caller(0)
-	if !ok {
-		log.Fatal("unable to determine source file path")
-	}
+//go:embed *.txt
+var textFiles embed.FS
 
-	path := filepath.Join(filepath.Dir(currentFile), name)
+func GenerateASCII() {
 
-	content, err := os.ReadFile(path)
+}
+
+func ASCIIMacOS() (string, error) {
+	content, err := textFiles.ReadFile("macOS.txt")
 	if err != nil {
 		return "", err
 	}
@@ -24,26 +21,13 @@ func getArt(name string) (string, error) {
 	return string(content), nil
 }
 
-func GenerateASCII() {
-
-}
-
-func ASCIIMacOS() (string, error) {
-	ascii, err := getArt("macOS.txt")
-	if err != nil {
-		return "", err
-	}
-
-	return ascii, nil
-}
-
 func ASCIIWindows() (string, error) {
-	ascii, err := getArt("windows.txt")
+	content, err := textFiles.ReadFile("windows.txt")
 	if err != nil {
 		return "", err
 	}
 
-	return ascii, nil
+	return string(content), nil
 }
 
 func ASCIILinux() {

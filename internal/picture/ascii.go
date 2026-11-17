@@ -3,33 +3,29 @@ package picture
 import (
 	"embed"
 	_ "embed"
+	"fmt"
 )
 
 //go:embed *.txt
 var textFiles embed.FS
 
-func GenerateASCII() {
+func GenerateASCII(os string) (string, error) {
+	filename := ""
+	switch os {
+	case "macOS":
+		filename = "macOS.txt"
+	case "linux":
+		filename = "linux.txt"
+	case "windows":
+		filename = "windows.txt"
+	default:
+		return "", fmt.Errorf("No os provided")
+	}
 
-}
-
-func ASCIIMacOS() (string, error) {
-	content, err := textFiles.ReadFile("macOS.txt")
+	content, err := textFiles.ReadFile(filename)
 	if err != nil {
 		return "", err
 	}
 
 	return string(content), nil
-}
-
-func ASCIIWindows() (string, error) {
-	content, err := textFiles.ReadFile("windows.txt")
-	if err != nil {
-		return "", err
-	}
-
-	return string(content), nil
-}
-
-func ASCIILinux() {
-
 }

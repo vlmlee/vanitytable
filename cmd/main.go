@@ -21,7 +21,7 @@ func main() {
 }
 
 func run(args []string) error {
-	opts, err := cli.ParseFlags(args, os.Stderr)
+	fs, opts, err := cli.ParseFlags(args, os.Stderr)
 	if err != nil {
 		return err
 	}
@@ -31,8 +31,8 @@ func run(args []string) error {
 		os.Exit(0)
 	}
 
-	if opts.ImagePath != "" {
-		if err := cli.SetDisplayPictureFilePath(); err != nil {
+	if opts.Image != "" {
+		if err := cli.SetDisplayPictureFilePath(fs); err != nil {
 			return fmt.Errorf("saving config: %w", err)
 		}
 	}

@@ -38,7 +38,7 @@ func RenderTable() error {
 		return fmt.Errorf("No configuration file found")
 	}
 
-	f, err := os.Open(config.DisplayImagePath)
+	f, err := os.Open(config.DisplayImage)
 	if err != nil {
 		return fmt.Errorf("failed to open image: %v", err)
 	}

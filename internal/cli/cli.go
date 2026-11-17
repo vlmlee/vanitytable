@@ -12,36 +12,36 @@ import (
 )
 
 type Config struct {
-	DisplayImagePath string
+	DisplayImage string
 }
 
 var DefaultConfig = &Config{
-	DisplayImagePath: "",
+	DisplayImage: "",
 }
 
 type Options struct {
-	About     bool
-	ImagePath string
+	About bool
+	Image string
 }
 
 var ProjectDescription = `
 This project is a neofetch clone built by vlmlee. 
 `
 
-func ParseFlags(args []string, stderr io.Writer) (*Options, error) {
+func ParseFlags(args []string, stderr io.Writer) (*flag.FlagSet, *Options, error) {
 	fs := flag.NewFlagSet("cli", flag.ContinueOnError)
 	fs.SetOutput(stderr)
 
 	opts := &Options{}
 
-	fs.StringVar(&opts.ImagePath, "imagePath", "", "Set the display image path")
+	fs.StringVar(&opts.Image, "image", "", "Set the display image path")
 	fs.BoolVar(&opts.About, "about", false, "Info about vanitytable")
 
 	if err := fs.Parse(args); err != nil {
-		return opts, err
+		return fs, opts, err
 	}
 
-	return opts, nil
+	return fs, opts, nil
 }
 
 // Prints info about this project to stdout
@@ -49,19 +49,19 @@ func PrintAbout() {
 	fmt.Println(ProjectDescription)
 }
 
-func SetDisplayPictureFilePath() error {
+func SetDisplayPictureFilePath(fs *flag.FlagSet) error {
 	config, err := LoadConfig()
 	if err != nil {
 		return err
 	}
 
-	f := flag.Lookup("imagePath")
+	f := fs.Lookup("image")
 
 	if f == nil {
-		return fmt.Errorf("No imagePath supplied")
+		return fmt.Errorf("No image supplied")
 	}
 
-	config.DisplayImagePath = f.Value.String()
+	config.DisplayImage = f.Value.String()
 	SaveConfig(config)
 
 	return nil
